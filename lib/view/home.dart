@@ -73,101 +73,110 @@ class _HomeState extends State<Home> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Container(
-                    decoration:
-                        BoxDecoration(border: Border.all(color: Colors.white)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("Jewellery"),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            fetchAllProducts;
+          });
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("Jewellery"),
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Container(
-                    decoration:
-                        BoxDecoration(border: Border.all(color: Colors.white)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("electronics"),
+                    SizedBox(
+                      width: 10,
                     ),
-                  ),
-                ],
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("electronics"),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            FutureBuilder<List<AllProducts>>(
-                future: fetchAllProducts,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GridView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 300,
-                                  childAspectRatio: 3 / 3,
-                                  crossAxisSpacing: 20,
-                                  mainAxisSpacing: 20),
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SingleProductView(
-                                            id: snapshot.data![index].id)));
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.white),
-                                    // color: Colors.amber,
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        height: 90,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: NetworkImage(snapshot
-                                                    .data![index].image),
-                                                fit: BoxFit.fill)),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Expanded(
-                                          child: Text(
-                                        snapshot.data![index].title,
-                                        textAlign: TextAlign.left,
-                                      )),
-                                    ],
+              FutureBuilder<List<AllProducts>>(
+                  future: fetchAllProducts,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GridView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: 300,
+                                    childAspectRatio: 3 / 3,
+                                    crossAxisSpacing: 20,
+                                    mainAxisSpacing: 20),
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SingleProductView(
+                                                  id: snapshot
+                                                      .data![index].id)));
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white),
+                                      // color: Colors.amber,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          height: 90,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: NetworkImage(snapshot
+                                                      .data![index].image),
+                                                  fit: BoxFit.fill)),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Expanded(
+                                            child: Text(
+                                          snapshot.data![index].title,
+                                          textAlign: TextAlign.left,
+                                        )),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }),
-                    );
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                })
-          ],
+                              );
+                            }),
+                      );
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  })
+            ],
+          ),
         ),
       ),
     );
